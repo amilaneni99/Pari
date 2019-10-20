@@ -10,16 +10,6 @@ $host='localhost';
 {
  die('Connection Failed :'.$conn->connect_error);
 }
-//$sql="CREATE DATABASE cat";
-
-//if($conn->query($sql) == TRUE)
-//{
-	//echo " Db is created";
-//}
-//else
-//{
-	//echo "Error creating database: " . $conn->error;
-//}
 
 $sql1="CREATE TABLE MyGuests (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

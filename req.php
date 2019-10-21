@@ -3,6 +3,7 @@
  $dbusername='root';
  $dbpassword='';
  $dbname='pari';
+$latlon = $_POST['latlon'];
 $location = $_POST['location'];
 $disaster = $_POST['disaster'];
 $food = $_POST['foodStr'];
@@ -45,8 +46,8 @@ if($conn->connect_error)
  die('Connection Failed :'.$conn->connect_error);
 }
 else{
-	$stmt = $conn->prepare("INSERT INTO requests (loc,disaster,food,medicines,dailyneeds,physicalassistance) VALUES (?,?,?,?,?,?);");
-	$stmt->bind_param("sssssi",$location,$disaster,$food,$medicines,$daily,$phyAssistance);
+	$stmt = $conn->prepare("INSERT INTO requests (loc,latlon,disaster,food,medicines,dailyneeds,physicalassistance) VALUES (?,?,?,?,?,?,?);");
+	$stmt->bind_param("ssssssi",$location,$latlon,$disaster,$food,$medicines,$daily,$phyAssistance);
 	$stmt->execute();
 	echo " Registration Succcess. ID=".$conn->insert_id;
 	$stmt->close();

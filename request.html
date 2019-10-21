@@ -263,6 +263,7 @@
                         <input type="hidden" id="hiddenMeds" name="medicinesStr" value="">
                         <input type="hidden" id="hiddenNeeds" name="dailyNeedsStr" value="">
                         <input type="hidden" id="hiddenAssistance" name="assistanceInt" value="">
+                        <input type="hidden" id="latlon" name="latlon" value="">
                         <button class="button" onclick="submitForm();" style="padding: 0;border-radius: 40px;height: 40px;">Request</button>
                     </form>
                 </div>
@@ -312,6 +313,10 @@
         var hiddenNeeds = document.getElementById("hiddenNeeds");
         hiddenNeeds.value = document.getElementById("dailyCheck").textContent;
 
+        //LatLon
+        var loc = document.getElementById("latlon");
+        loc.value = getLoc();
+
         document.forms['reqForm'].submit();
 
     }
@@ -348,46 +353,51 @@
     }
 </script>
 <script>
-    var x = document.getElementById("demo");
-    var latlng;
-    var address;
-    geocoder = new google.maps.Geocoder();
-    function success(position) {
-        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                if (results[1]) {
-                    address = results[0].address_components[0].short_name + "," + results[0].address_components[1].short_name + "," + results[0].address_components[2].short_name + "," + results[0].address_components[3].short_name;
-                    //console.log(address);
-                    x.innerHTML = address;
-                    // Render Stuff
-                } else {
-                    error("Unable to reverse Geocode");
-                }
-            }
-        });
+    var lat,lon;
+    function getLoc() {
+        return "{"+lat+","+lon+"}";
     }
-    function error(msg) {
-        console.log(msg);
-    }
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error);
-    }
-    else {
-        error('HTML 5 Geolocation not supported');
-    }
-
     function myMap() {
-        var myLatLng = { lat: 12.890, lng: 30.897 };
-        var mapProp = {
-            center: myLatLng,
-            zoom: 15,
-        };
-        var marker = new google.maps.Marker({ position: myLatLng });
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-        marker.setMap(map);
+        var x = document.getElementById("demo");
+        var latlng;
+        var address;
+        geocoder = new google.maps.Geocoder();
+        function success(position) {
+            lat = position.coords.latitude;
+            lon = position.coords.longitude;
+            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        address = results[0].address_components[1].short_name + "," + results[0].address_components[2].short_name + "," + results[0].address_components[3].short_name;
+                        //console.log(address);
+                        x.innerHTML = address;
+                        // Render Stuff
+                    } else {
+                        error("Unable to reverse Geocode");
+                    }
+                }
+            }); 
+            var myLatLng = latlng;
+            var mapProp = {
+                center: myLatLng,
+                zoom: 15,
+            };
+            var marker = new google.maps.Marker({ position: myLatLng });
+            var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            marker.setMap(map);
+        }
+        function error(msg) {
+            console.log(msg);
+        }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+        else {
+            error('HTML 5 Geolocation not supported');
+        }
     }
 </script>
 <script
-    src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyDpIC4MVEg30QNnspwSqvnK53px5PS-Fmw&callback=myMap"></script>
+    src="https://maps.googleapis.com/maps/api/js?sensor=false&key=API_KEY&callback=myMap"></script>
 </html>

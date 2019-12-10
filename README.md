@@ -1,4 +1,10 @@
 # Pari
+
+### Features
+* Donate Relief Materials
+* Request Relief Materials
+* Get your Donation Reciept to your Mail
+* No Login Needed
  
 To run this locally,
 * Clone or Download the Repo
